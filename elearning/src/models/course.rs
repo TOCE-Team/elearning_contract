@@ -61,19 +61,21 @@ pub struct CourseMetadata {
 
   /// Consensus for add new instructor
   pub consensus: HashMap<AccountId, Unit>,
-
 }
 
 pub trait CourseFeatures {
-  fn create_course(
+  fn test_create_course(
+    &mut self,
+  ) -> u128;
+
+  fn test_cross_call(
     &mut self,
     title: String,
     description: Option<String>,
     media: Option<String>,
     price: U128,
     skills: Vec<SkillId>,
-    is_instructor: bool
-  ) -> CourseMetadata;
+  );
 
   // Make user completed the course
   // fn make_user_finish_course(

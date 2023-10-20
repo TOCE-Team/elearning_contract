@@ -6,7 +6,7 @@ use near_sdk::{
   AccountId, CryptoHash, PanicOnDefault,
 };
 
-use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use crate::borsh::{self, BorshDeserialize, BorshSerialize};
 
 use super::{
   certificate::{CertificateId, CertificateMetadata},
@@ -47,6 +47,9 @@ pub struct ELearningContract {
   /// Account ID of the owner of the contract.
   pub owner_id: AccountId,
 
+  /// Pool address to stake
+  pub user_address: AccountId,
+
   /// Metadata associated with the e-learning contract.
   pub metadata_contract: LazyOption<ELearningContractMetadata>,
 
@@ -56,23 +59,38 @@ pub struct ELearningContract {
   /// Storage all user_id of instructor users. -> For count all of instructors in the system
   pub intructor_users: UnorderedSet<AccountId>,
 
-  // All course id
+  /// Map of mentor users. -> For count all of mentors in the system
+  // pub mentor_users: UnorderedMap<u32, AccountId>,
+
+  /// Map of `JsonUser` metadata by user ID.
+
+  /// All course id
   pub all_course_id: UnorderedSet<CourseId>,
 
-  // /// Map of course sets by user ID.
+  /// Map of course sets by user ID.
   pub courses_per_user: LookupMap<AccountId, UnorderedSet<CourseId>>,
 
-  // /// Map of course sets by Instructors
+  /// Map of course sets by Instructors
   pub courses_per_instructor: LookupMap<AccountId, UnorderedSet<CourseId>>,
 
-  // /// Map of `CourseMetadata` by course ID.
+  /// Map of `CourseMetadata` by course ID.
   pub course_metadata_by_id: LookupMap<CourseId, CourseMetadata>,
 
-  // /// Map of certificate sets by user ID.
+  /// Map of certificate sets by user ID.
   pub certificate_per_user: LookupMap<AccountId, UnorderedSet<CertificateId>>,
 
   /// Map of `CertificateMetadata` by certificate ID.
   pub certificate_metadata_by_id: LookupMap<CertificateId, CertificateMetadata>,
+
+  /// Map of SkillMetadata by SkillId
+  pub skill_metadata_by_skill_id: LookupMap<SkillId, UnorderedSet<SkillMetadata>>,
+
+  // Storage all user_id of subscriber users -> For count all of users in the system
+
+  // Map of PoolMetadata by PoolId
+
+
+
 }
 
 /// The `ELearningContractStorageKey` enum represents keys for different persistent collections in the contract storage.
@@ -81,6 +99,7 @@ pub enum ELearningStorageKey {
   ContractMetadata,
   SubscriberUsers,
   IntructorUsers,
+  // MentorUsers,
   UserMetadataById,
   AllCourseId,
   CoursesPerUser,
@@ -92,6 +111,10 @@ pub enum ELearningStorageKey {
   CoursesPerInstructorInner { instructor_id_hash: CryptoHash },
   SkillMetadataPerSkillId,
   SkillMetadataPerSkillIdInner { skill_id_hash: CryptoHash },
+  AllPoolId,
+  PoolMetadataByPoolId,
   AllComboId,
   ComboMetadataByComboId,
+  AllMentoringId,
+  MentoringMetadataByMentoringId,
 }
