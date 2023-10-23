@@ -32,7 +32,7 @@ impl ELearningContract {
       user_address: env::signer_account_id(),
       metadata_contract: LazyOption::new(ELearningStorageKey::ContractMetadata.try_to_vec().unwrap(), Some(&metadata)),
       subscriber_users: UnorderedSet::new(ELearningStorageKey::SubscriberUsers.try_to_vec().unwrap()),
-      intructor_users: UnorderedSet::new(ELearningStorageKey::IntructorUsers.try_to_vec().unwrap()),
+      instructor_users: UnorderedSet::new(ELearningStorageKey::IntructorUsers.try_to_vec().unwrap()),
       all_course_id: UnorderedSet::new(ELearningStorageKey::AllCourseId.try_to_vec().unwrap()),
       courses_per_user: LookupMap::new(ELearningStorageKey::CoursesPerUser.try_to_vec().unwrap()),
       courses_per_instructor: LookupMap::new(ELearningStorageKey::CoursesPerInstructor.try_to_vec().unwrap()),

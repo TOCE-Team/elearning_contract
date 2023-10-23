@@ -8,11 +8,20 @@ use crate::{
     user_request::external::{cross_user, GAS_FOR_CHECK_RESULT},
   },
 };
-use near_sdk::{env, json_types::U128, near_bindgen, AccountId, Balance, Gas, PromiseResult};
+use near_sdk::{env, json_types::U128, near_bindgen, AccountId, Balance, Gas, PromiseError, PromiseResult};
 use std::{collections::HashMap, ptr::null};
 
 #[near_bindgen]
 impl CourseFeatures for ELearningContract {
+  fn update_user_ct_address(&mut self, user_address: AccountId) {
+    assert!(env::signer_account_id() == self.owner_id);
+    self.user_address = user_address;
+  }
+
+  fn check_user_ct_address(&mut self) -> AccountId {
+    return self.user_address.to_owned();
+  }
+
   fn test_cross_call(
     &mut self,
     title: String,
@@ -24,25 +33,19 @@ impl CourseFeatures for ELearningContract {
     cross_user::ext(self.user_address.to_owned())
       .with_static_gas(GAS_FOR_CHECK_RESULT)
       .check_instructor()
-      .then(Self::ext(env::current_account_id()).with_static_gas(GAS_FOR_CHECK_RESULT).test_create_course());
+      .then(Self::ext(self.user_address.to_owned()).with_static_gas(GAS_FOR_CHECK_RESULT).change_greeting_callback());
   }
 
   #[private]
-  fn test_create_course(&mut self) -> u128 {
-    let result = match env::promise_result(0) {
-      PromiseResult::NotReady => env::abort(),
-      PromiseResult::Successful(value) => {
-        if let Ok(refund) = near_sdk::serde_json::from_slice::<U128>(&value) {
-          refund.0
-          // If we can't properly parse the value, the original amount is returned.
-        } else {
-          U128(2).into()
-        }
-      },
-      PromiseResult::Failed => U128(2).into(),
-    };
-
-    return result;
+  fn change_greeting_callback(&mut self, #[callback_result] call_result: Result<(), PromiseError>) -> bool {
+    // Return whether or not the promise succeeded using the method outlined in external.rs
+    if call_result.is_err() {
+      env::log_str("set_greeting failed...");
+      return false;
+    } else {
+      env::log_str("set_greeting was successful!");
+      return true;
+    }
   }
 
   // TODO: More Requirement to check

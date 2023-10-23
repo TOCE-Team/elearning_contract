@@ -57,7 +57,7 @@ pub struct ELearningContract {
   pub subscriber_users: UnorderedSet<AccountId>,
 
   /// Storage all user_id of instructor users. -> For count all of instructors in the system
-  pub intructor_users: UnorderedSet<AccountId>,
+  pub instructor_users: UnorderedSet<AccountId>,
 
   /// Map of mentor users. -> For count all of mentors in the system
   // pub mentor_users: UnorderedMap<u32, AccountId>,

@@ -4,7 +4,7 @@ use near_sdk::{
   borsh::{self, BorshDeserialize, BorshSerialize},
   json_types::U128,
   serde::{Deserialize, Serialize},
-  AccountId, Balance,
+  AccountId, Balance, PromiseError,
 };
 
 use super::skill::SkillId;
@@ -64,9 +64,9 @@ pub struct CourseMetadata {
 }
 
 pub trait CourseFeatures {
-  fn test_create_course(
-    &mut self,
-  ) -> u128;
+  fn update_user_ct_address(&mut self, user_address: AccountId);
+
+  // fn test_create_course(&mut self) -> u128;
 
   fn test_cross_call(
     &mut self,
@@ -76,6 +76,10 @@ pub trait CourseFeatures {
     price: U128,
     skills: Vec<SkillId>,
   );
+
+  fn check_user_ct_address(&mut self) -> AccountId;
+
+  fn change_greeting_callback(&mut self, call_result: Result<(), PromiseError>) -> bool;
 
   // Make user completed the course
   // fn make_user_finish_course(
