@@ -79,7 +79,14 @@ pub trait CourseFeatures {
 
   fn check_user_ct_address(&mut self) -> AccountId;
 
-  fn change_greeting_callback(&mut self, call_result: Result<(), PromiseError>) -> bool;
+  fn change_greeting_callback(
+    &mut self,
+    title: String,
+    description: Option<String>,
+    media: Option<String>,
+    price: U128,
+    skills: Vec<SkillId>,
+  );
 
   // Make user completed the course
   // fn make_user_finish_course(
@@ -109,20 +116,20 @@ pub trait EnumCourse {
 
   fn get_all_course_id(&self, start: Option<u32>, limit: Option<u32>) -> Vec<CourseId>;
 
-  /// Get all the course per user have. Current and complete course
-  fn get_purchase_course_by_user_id(
-    &self,
-    user_id: AccountId,
-    start: Option<u32>,
-    limit: Option<u32>,
-  ) -> Vec<CourseMetadata>;
+  // Get all the course per user have. Current and complete course
+  // fn get_purchase_course_by_user_id(
+  //   &self,
+  //   user_id: AccountId,
+  //   start: Option<u32>,
+  //   limit: Option<u32>,
+  // ) -> Vec<CourseMetadata>;
 
   fn get_course_metadata_by_course_id(&self, course_id: CourseId) -> Option<CourseMetadata>;
 
-  fn get_all_courses_per_instructor(
-    &self,
-    instructor_id: AccountId,
-    start: Option<u32>,
-    limit: Option<u32>,
-  ) -> Vec<CourseMetadata>;
+  // fn get_all_courses_per_instructor(
+  //   &self,
+  //   instructor_id: AccountId,
+  //   start: Option<u32>,
+  //   limit: Option<u32>,
+  // ) -> Vec<CourseMetadata>;
 }
