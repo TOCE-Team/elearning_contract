@@ -1,4 +1,6 @@
-use near_sdk::{ext_contract, Gas, PromiseOrValue, Promise, json_types::U128, AccountId};
+use near_sdk::{ext_contract, Gas, PromiseOrValue, Promise, json_types::U128, AccountId, PromiseResult};
+
+use crate::models::course::CourseId;
 
 
 pub const GAS_FOR_CHECK_RESULT: Gas = Gas(5_000_000_000_000);
@@ -9,4 +11,7 @@ pub const GAS_FOR_CROSS_CALL: Gas = Gas(3_000_000_000_000);
 pub trait CrossCall {
   /// Cross call pool contract and storage pool id
   fn check_instructor(&mut self, user_id: AccountId) -> PromiseOrValue<U128>;
+
+  fn update_course_by_user(&mut self, course_id: CourseId) -> PromiseResult;
+
 }

@@ -22,7 +22,7 @@ impl CourseFeatures for ELearningContract {
     return self.user_address.to_owned();
   }
 
-  fn test_cross_call(
+  fn create_course_by_instructor(
     &mut self,
     title: String,
     description: Option<String>,
@@ -33,7 +33,7 @@ impl CourseFeatures for ELearningContract {
     let user_id = env::signer_account_id();
 
     cross_user::ext(self.user_address.to_owned()).with_static_gas(GAS_FOR_CROSS_CALL).check_instructor(user_id).then(
-      Self::ext(env::current_account_id()).with_static_gas(GAS_FOR_CHECK_RESULT).change_greeting_callback(
+      Self::ext(env::current_account_id()).with_static_gas(GAS_FOR_CHECK_RESULT).update_course_callback(
         title,
         description,
         media,
@@ -44,7 +44,7 @@ impl CourseFeatures for ELearningContract {
   }
 
   #[private]
-  fn change_greeting_callback(
+  fn update_course_callback(
     &mut self,
     title: String,
     description: Option<String>,
@@ -65,7 +65,7 @@ impl CourseFeatures for ELearningContract {
       PromiseResult::Failed => U128(2).into(),
     };
 
-    let user_id = env::signer_account_id();
+    let user_id: AccountId = env::signer_account_id();
 
     let price: Balance = price.into();
     let mut initial_instructor: HashMap<AccountId, u32> = HashMap::new();

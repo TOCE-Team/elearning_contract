@@ -68,7 +68,7 @@ pub trait CourseFeatures {
 
   // fn test_create_course(&mut self) -> u128;
 
-  fn test_cross_call(
+  fn create_course_by_instructor(
     &mut self,
     title: String,
     description: Option<String>,
@@ -79,7 +79,7 @@ pub trait CourseFeatures {
 
   fn check_user_ct_address(&mut self) -> AccountId;
 
-  fn change_greeting_callback(
+  fn update_course_callback(
     &mut self,
     title: String,
     description: Option<String>,

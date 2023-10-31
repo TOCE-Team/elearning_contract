@@ -7,3 +7,7 @@ pub(crate) fn convert_coure_title_to_cousrse_id(title: &str, account_id: String)
   let result = lowercased + " " + &account;
   result.replace(' ', "_")
 }
+
+pub(crate) fn convert_to_yocto(amount: u128) -> u128 {
+  amount * (10u128.pow(24))
+}
